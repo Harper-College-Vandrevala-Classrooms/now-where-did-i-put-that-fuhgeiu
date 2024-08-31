@@ -1,23 +1,16 @@
 #include <iostream>
-#include "classcustvar.hpp"
 
-using namespace std;
 
-// method defintions
-
-mydata::mydata (int t) {
-
-    *ptr = t;
-}
-
+using namespace cstd;
 
 void mydata::change (int t){
 
-    *ptr = t;
+    *ptr1 = t;
 }
 
 
 void mydata::temp(){
 
-    cout << *ptr;
+    std::cout << *ptr1;
 }
+

@@ -1,25 +1,43 @@
 #include <iostream>
 
-using namespace std;
-
-class mydata {
-
-    int* ptr = new;                     // pointer to allocate memory for a single char slot
-
-    std::string input;
-
-    int* ptr1;
-    ptr1 = &input;
-
-public:
-
-    mydata(int);
-
-    void temp();
-
-    void change(int);
+namespace cstd {
 
 
+    class mydata {
+
+        std::string s1;
+
+        char *ptr1 = s1[0];
+
+    public:
+
+        mydata() {};                   // default constructor
+
+        void change(int T);            // member decleration
+
+        void temp();                   // member decleration
 
 
-};
+    };
+
+
+    void mydata::change (int t){
+
+        *ptr1 = t;
+    }
+
+
+    void mydata::temp(){
+
+        std::cout << *ptr1;
+    }
+
+    void temp(){
+
+    }
+
+
+
+
+}
+
