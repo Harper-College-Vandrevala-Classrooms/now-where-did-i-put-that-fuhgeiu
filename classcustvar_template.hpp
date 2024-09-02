@@ -1,12 +1,30 @@
 #include <iostream>
 
+// notes, this library will contain class and members and templates that are not used in every project
+// this is my library i will use and expand in projects to learn
 
-template<int S,typename T>
+/*
+ * contents
+ *
+ * class template for array like container, container (0)
+ *
+ *
+ *
+ * class for project
+ *
+ *
+ * class template to read stream buffer and store into container (0)
+ *
+ *
+ */
+
+// mem adress 7f = in stack on 64bit system
+
+template<int S,typename T>                  // <size of container, data type>
 class mydataT {
 
-    T m_array[S];                           // stack array, dynamic at compile time
-
-    int* my_heaparray = new T[S];           // heap array
+    T m_fixedcont[S];                           // stack array, dynamic at compile time
+    int* my_heaparray = new T[S];           // heap array, return pointer to mem spot
 
 public:
 
@@ -14,28 +32,25 @@ public:
 
     int size() const {return S;}             // returns size as an int
 
-    T& operator[](int index) {return m_array[index];}           // return refernce
-    const T& operator[](int index) const {return m_array[index];}           // for use if array is const
+    T& operator[](int index) {return m_fixedcont[index];}           // return refernce
+    const T& operator[](int index) const {return m_fixedcont[index];}           // for use if array is const
 
-    T* arraypointer () { return m_array; }                                  // return pointer to array
+    T* arraypointer () { return m_fixedcont; }                                  // return pointer to array
 
-    void getsay();
+//    void getsay();
 };
 
+//template<int S, typename T> void mydataT<S,T>::getsay(){}
 
-template<int S, typename T> void mydataT<S,T>::getsay(){
-
-
-}
 
 
 
 namespace cstd {
 
-
 class mydata {
 
     int *ptrcont;                     // pointer to start of container
+
 
 public:
 
@@ -43,11 +58,9 @@ public:
 
     void change(int T);            // member decleration
 
-    void temp();                   // member decleration
+    void temp();                   // member decleration, output pointer
 
-    void getandstoreinput();
-
-    void locate(typename T);
+    template<typename T> void locate(T x);      // member decleraiton using template
 
 };
 
@@ -64,19 +77,40 @@ void mydata::temp(){
 }
 
 
-template <typename T> void mydata::locate(T){
+template <typename T> void mydata::locate(T x){         // member definition using template
 
-    std::cout << T;
+    std::cout << x;
+
+    std::cout << *ptrcont;
 }
 
 
-void getandstoreinput(){                                      // get an input and stream string into container
 
+
+namespace mystd{
+
+
+class custstring {
+
+    int* ptrcont;
+
+
+
+
+
+public:
+
+    custstring() {};
+
+    int locate();
+
+};
+
+int custstring::locate() {
 
 
 
 }
-
 
 
 }
