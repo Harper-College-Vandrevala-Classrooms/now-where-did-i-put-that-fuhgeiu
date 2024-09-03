@@ -50,17 +50,6 @@ using namespace cstd;
 }
 
 
-
-// for object using a template class, as example, will be used as a user defined data type
-
-    mydataT<5,int> mycont0;                           // new obkect based on class using template
-
-    mycont0.size();                                   // return size as int
-
-    mycont0[2];                                       // pass by refernce index of array
-
-
-
 // start of actual program
 
     std::cout << "enter a sentence\n";         // prompt user
@@ -71,7 +60,7 @@ using namespace cstd;
 
     getstring(*mycont);                  // get string and store into custom container
 
-    mycont->find ();                                   // to find and return search
+
 }
 
 

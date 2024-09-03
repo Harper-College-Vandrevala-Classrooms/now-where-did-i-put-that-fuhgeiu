@@ -61,7 +61,7 @@ private:
 
     void Calloc (size_t newCapacity){                // allocates memory, called everytime need or want more memory
 
-        T* newBlock = new T[newCapacity];                       // allocate a array, to store moved data
+        T* newBlock = (T*)::operator new (newCapacity* sizeof(T));      // --allocate a array, to store moved data
 
         if (newCapacity < cd_size) cd_size = newCapacity;       // for reducing container size to a new capacity
 
@@ -71,6 +71,12 @@ private:
             newBlock[i] = std::move(cd_data[i]);            // move data
         }
 
+        for (size_t i = 0; i < cd_size; i++) {                  // to allocate more memory to increase container size
+
+            cd_data[i].~T();                                // clear data without changing container size
+        }
+
+        ::operator delete(cd_data, cd_capacity * sizeof(T));        // --
         delete[] cd_data;                                 // delete from where we moved data from
         cd_data = newBlock;                               // assign pointer to block of meory where data was moved to
         cd_capacity = newCapacity;                        // assign a capacity based on block of memory we moved data to
@@ -80,7 +86,10 @@ public:
 
     contdynamic() {Calloc(2);}                   // default constructor allocate for 2 slots
 
-    ~contdynamic() {delete[] cd_data;}                      // destructor
+    ~contdynamic() {                                        // destructor
+        clear();                                                // clear the memory block
+        ::operator delete(cd_data, cd_capacity * sizeof (T));    // instead of array delete call oparator to clear
+    }
 
     void append(const T& element) {
 
@@ -132,10 +141,6 @@ public:
 
 
 }
-
-
-
-
 
 
 namespace mystd{
