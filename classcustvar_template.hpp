@@ -90,7 +90,7 @@ template <typename T> void mydata::locate(T x){         // member definition usi
 namespace mystd{
 
 
-class custstring {
+class contblock {
 
     int* ptrcont;
 
@@ -100,13 +100,37 @@ class custstring {
 
 public:
 
-    custstring() {};
+    contblock() { };
+
+    void storeblock(std::string);
+
+    int find ();
 
     int locate();
 
 };
 
-int custstring::locate() {
+int contblock::locate() {
+
+
+
+}
+
+
+
+void storeblock(std::string tempstring) {                                    // store string into array template class
+
+    tempstring.size();
+
+
+
+
+
+}
+
+int find () {
+
+
 
 
 
@@ -114,3 +138,6 @@ int custstring::locate() {
 
 
 }
+
+
+

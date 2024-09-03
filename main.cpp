@@ -2,7 +2,7 @@
 #include "classcustvar_template.hpp"
 
 
-void getstring(mystd::custstring mycont) {                     // getstring will take stream buffer and assign into a container
+void getstring(mystd::contblock mycont) {                     // getstring will take stream buffer and assign into a container
 
     std::string tempstring;                               // temp variable, destroy after function
 
@@ -10,23 +10,10 @@ void getstring(mystd::custstring mycont) {                     // getstring will
 
     std::getline(std::cin,tempstring);              // stream into temporary string
 
-
-
-    for (char c : tempstring) {                    // itterate over string and store value to my container
-
-        mycont
-
-    }
-
+    mycont.storeblock(tempstring);                                  // take and store string into container block
 }
 
 
-int find () {
-
-
-
-
-}
 
 
 int main () {
@@ -53,15 +40,17 @@ using namespace cstd;
 
 
 
-// start
-
-    mystd::custstring mycont;                // create obejct similar to string
+// start of actual program
 
     std::cout << "enter a sentence\n";         // prompt user
 
-    getstring(mycont);                  // get string and store into custom container
+    void temp ();                              // get string and size
 
-    find ();                                   // to find and return search
+    mystd::contblock *mycont = new mystd::contblock;          // create object for container heap
+
+    getstring(*mycont);                  // get string and store into custom container
+
+    mycont->find ();                                   // to find and return search
 }
 
 
