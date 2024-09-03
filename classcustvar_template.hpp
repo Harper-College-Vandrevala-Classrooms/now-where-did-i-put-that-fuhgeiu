@@ -20,10 +20,12 @@
 
 // mem adress 7f = in stack on 64bit system
 
+
+// fixed container
 template<int S,typename T>                  // <size of container, data type>
 class mydataT {
 
-    T m_fixedcont[S];                           // stack array, dynamic at compile time
+    T m_fixedcont[S];                           // stack array
     int* my_heaparray = new T[S];           // heap array, return pointer to mem spot
 
 public:
@@ -44,45 +46,94 @@ public:
 
 
 
-
+// dynamic container
 namespace cstd {
 
-class mydata {
+template <typename T>
+class contdynamic {
 
-    int *ptrcont;                     // pointer to start of container
+    T* cd_data = nullptr;
 
+    size_t  cd_size = 0;                // used amount of container
+    size_t cd_capacity = 0;             // capacity of container
+
+private:
+
+    void Calloc (size_t newCapacity){                // allocates memory, called everytime need or want more memory
+
+        T* newBlock = new T[newCapacity];                       // allocate a array, to store moved data
+
+        if (newCapacity < cd_size) cd_size = newCapacity;       // for reducing container size to a new capacity
+
+
+        for (size_t i = 0; i < cd_size; i++) {                  // to allocate more memory to increase container size
+
+            newBlock[i] = std::move(cd_data[i]);            // move data
+        }
+
+        delete[] cd_data;                                 // delete from where we moved data from
+        cd_data = newBlock;                               // assign pointer to block of meory where data was moved to
+        cd_capacity = newCapacity;                        // assign a capacity based on block of memory we moved data to
+    }
 
 public:
 
-    mydata() {};                   // default constructor
+    contdynamic() {Calloc(2);}                   // default constructor allocate for 2 slots
 
-    void change(int T);            // member decleration
+    ~contdynamic() {delete[] cd_data;}                      // destructor
 
-    void temp();                   // member decleration, output pointer
+    void append(const T& element) {
 
-    template<typename T> void locate(T x);      // member decleraiton using template
+        if (cd_size >= cd_capacity){                         // to increase available container space
+
+            Calloc(cd_capacity + cd_size / 2);   // allocate 1.5 times memory size
+        }
+
+        cd_data[cd_size] = element;                         // copy data to apped onto container and assign
+        cd_size++;                                          // increment size
+    }
+
+    void append(const T&& element) {                         // to mvoe data
+
+        if (cd_size >= cd_capacity){                         // to increase available container space
+
+            Calloc(cd_capacity + cd_size / 2);   // allocate 1.5 times memory size
+        }
+
+        cd_data[cd_size] = std::move(element);              // move data to apped onto container and assign
+        cd_size++;                                          // increment size
+    }
+
+    void popback() {
+        if (cd_size > 0) {
+
+            cd_size--;
+            cd_data[cd_size].~T();
+        }
+    }
+
+    void clear() {
+
+        for (size_t i = 0; i < cd_size; i++){
+            cd_data[i].~T();
+        }
+
+        cd_size = 0;
+    }
+
+
+    size_t Size() const {return cd_size;}
+
+    const T& operator[](size_t index) const { return cd_data; }   // return data at index of container ,const version
+
+    T& operator[](size_t index)  { return cd_data; }   // return data at index of container
 
 };
 
 
-void mydata::change (int t){
-
-    *ptrcont = t;
 }
 
 
-void mydata::temp(){
-
-    std::cout << *ptrcont;
-}
-
-
-template <typename T> void mydata::locate(T x){         // member definition using template
-
-    std::cout << x;
-
-    std::cout << *ptrcont;
-}
 
 
 
@@ -120,9 +171,9 @@ int contblock::locate() {
 
 void storeblock(std::string tempstring) {                                    // store string into array template class
 
-    tempstring.size();
+    int s = tempstring.size();
 
-
+    mydataT<s,int> cont;
 
 
 
@@ -141,3 +192,9 @@ int find () {
 
 
 
+
+// add asserts for out of range indexing
+
+// l and r values
+// variatic templates (emplaceback)
+// destructor
