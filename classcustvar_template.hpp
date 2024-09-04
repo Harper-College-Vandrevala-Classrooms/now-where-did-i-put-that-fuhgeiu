@@ -136,41 +136,87 @@ public:
 
     T& operator[](size_t index)  { return cd_data; }   // return data at index of container
 
-
-
 };
 
 
-// inherited class to pass into template arguemnt as a user defined data type
+// inherited class to pass into template arguemnt to define data type and move data from another container
 class contblock : public contdynamic<contblock*> {              // inherited class, to pass in as template arguemnt
 
 //    ~ contblock() {};                                         // question
+
 
 public:
 
     void storeblock(std::string,contblock);                 // store string into container using class as data type
 
-    template <typename T> void datapass ();                 // to pass in data type when append
 };
 
-template <typename T>
-void datapass () {
 
+// inherited class for data to pass in to append if user defined data type container
+template <typename T>                                       // generic allows, reuse class for multiple data types
+class datapass  :   public contblock {                      // if container requires a template as element
 
-}
+public:
+
+    datapass() {}
+
+};
 
 
 void contblock::storeblock(std::string tempstring,contblock mycont) {        // store string into array template class
 
 
+    mycont.append();                                 // append with new allocated class
 
-    mycont.append(new );
-
-
+    mycont.append(new datapass<char>());                            // append with new allocated user data type
 
 
 
 }
+
+
+
+
+
+class string {
+
+    char* m_data;
+    size_t m_size;
+
+public:
+
+    string () {};
+
+    string (const char* string) {
+
+        m_size = strlen(string);
+        m_data = new char[m_size];
+        memcpy(m_data, string, m_size);
+
+
+    }
+
+    ~ string (){
+
+        delete m_data;
+    }
+
+
+
+
+
+
+
+
+};
+
+
+
+
+
+
+
+
 
 //
 //}

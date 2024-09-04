@@ -2,15 +2,6 @@
 #include "classcustvar_template.hpp"
 
 
-template <typename T>
-void print (const cstd::contdynamic<T>& Contdynamic){
-
-    for (size_t i = 0; i < Contdynamic.Size(); i++){
-        std::cout << Contdynamic[i] << std::endl;
-    }
-}
-
-
 void getstring(cstd::contblock mycont) {              // getstring will take stream buffer and assign into a container
 
     std::string tempstring;                               // temp variable, destroy after function
