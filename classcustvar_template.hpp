@@ -65,7 +65,6 @@ private:
 
         if (newCapacity < cd_size) cd_size = newCapacity;       // for reducing container size to a new capacity
 
-
         for (size_t i = 0; i < cd_size; i++) {                  // to allocate more memory to increase container size
 
             newBlock[i] = std::move(cd_data[i]);            // move data
@@ -86,9 +85,10 @@ public:
 
     contdynamic() {Calloc(2);}                   // default constructor allocate for 2 slots
 
-    ~contdynamic() {                                        // destructor
+    virtual ~contdynamic() {                                        // destructor
+
         clear();                                                // clear the memory block
-        ::operator delete(cd_data, cd_capacity * sizeof (T));    // instead of array delete call oparator to clear
+        ::operator delete(cd_data, cd_capacity * sizeof(T));    // instead of array delete call oparator to clear
     }
 
     void append(const T& element) {
@@ -102,7 +102,7 @@ public:
         cd_size++;                                          // increment size
     }
 
-    void append(const T&& element) {                         // to mvoe data
+    void append(const T&& element) {                         // to mvoe data must be rvalue to use move()
 
         if (cd_size >= cd_capacity){                         // to increase available container space
 
@@ -130,61 +130,41 @@ public:
         cd_size = 0;
     }
 
-
     size_t Size() const {return cd_size;}
 
     const T& operator[](size_t index) const { return cd_data; }   // return data at index of container ,const version
 
     T& operator[](size_t index)  { return cd_data; }   // return data at index of container
 
+
+
 };
 
 
-}
+// inherited class to pass into template arguemnt as a user defined data type
+class contblock : public contdynamic<contblock*> {              // inherited class, to pass in as template arguemnt
 
-
-namespace mystd{
-
-
-class contblock {
-
-    int* ptrcont;
-
-
-
-
+//    ~ contblock() {};                                         // question
 
 public:
 
-    contblock() { };
+    void storeblock(std::string,contblock);                 // store string into container using class as data type
 
-    void storeblock(std::string);
-
-    int find ();
-
-    int locate();
-
+    template <typename T> void datapass ();                 // to pass in data type when append
 };
 
-int contblock::locate() {
-
-
-
-}
-
-
-
-void storeblock(std::string tempstring) {                                    // store string into array template class
-
-    int s = tempstring.size();
-
-    mydataT<s,int> cont;
-
+template <typename T>
+void datapass () {
 
 
 }
 
-int find () {
+
+void contblock::storeblock(std::string tempstring,contblock mycont) {        // store string into array template class
+
+
+
+    mycont.append(new );
 
 
 
@@ -192,14 +172,44 @@ int find () {
 
 }
 
+//
+//}
+//
+//
+//namespace mystd{
 
-}
+
+//class contblock {
+//
+//    cstd::contdynamic<contblock*> my_data;                // contianer from our dynamic container class template
+//
+//public:
+//
+//    contblock() { };                                                  // constructor
+//
+//    void storeblock(std::string,contblock);                     // method decleration for storing
+//
+//    template <typename T,class C> int locate();                 // for locating in container
+//
+//    virtual ~contblock () {};
+//};
+//
+//template <typename T>
+//class custchar : public contblock {                             // for storing char
+//
+//    T character;
+//
+//    void custcharmehtod (T) {};
+//
+//};      // end of class
+
+
+}   // end of name space
 
 
 
 
 // add asserts for out of range indexing
 
-// l and r values
 // variatic templates (emplaceback)
 // destructor
