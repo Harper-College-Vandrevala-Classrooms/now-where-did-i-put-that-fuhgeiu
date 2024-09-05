@@ -38,8 +38,6 @@ public:
     const T& operator[](int index) const {return m_fixedcont[index];}           // for use if array is const
 
     T* arraypointer () { return m_fixedcont; }                                  // return pointer to array
-
-//    void getsay();
 };
 
 //template<int S, typename T> void mydataT<S,T>::getsay(){}
@@ -54,6 +52,7 @@ class contdynamic {
 
     T* cd_data = nullptr;
 
+protected:
     size_t  cd_size = 0;                // used amount of container
     size_t cd_capacity = 0;             // capacity of container
 
@@ -70,7 +69,7 @@ private:
             newBlock[i] = std::move(cd_data[i]);            // move data
         }
 
-        for (size_t i = 0; i < cd_size; i++) {                  // to allocate more memory to increase container size
+        for (size_t i = 0; i < cd_size; i++) {                  // for deallocating memory (shrink container)
 
             cd_data[i].~T();                                // clear data without changing container size
         }
@@ -83,12 +82,12 @@ private:
 
 public:
 
-    contdynamic() {Calloc(2);}                   // default constructor allocate for 2 slots
+    contdynamic() {Calloc(1);}                   // default constructor allocate for 2 slots
 
     virtual ~contdynamic() {                                        // destructor
 
         clear();                                                // clear the memory block
-        ::operator delete(cd_data, cd_capacity * sizeof(T));    // instead of array delete call oparator to clear
+        ::operator delete(cd_data, cd_capacity * sizeof(T));    // instead of array delete call oparator to delete
     }
 
     void append(const T& element) {
@@ -130,7 +129,7 @@ public:
         cd_size = 0;
     }
 
-    size_t Size() const {return cd_size;}
+    size_t Size() const {return cd_size;}                         // return size of container
 
     const T& operator[](size_t index) const { return cd_data; }   // return data at index of container ,const version
 
@@ -139,17 +138,44 @@ public:
 };
 
 
-// inherited class to pass into template arguemnt to define data type and move data from another container
-class contblock : public contdynamic<contblock*> {              // inherited class, to pass in as template arguemnt
-
-//    ~ contblock() {};                                         // question
-
+// inherited class for use with fixed data type container
+template <typename T>
+class contblockfixed : contdynamic<T> {
 
 public:
 
-    void storeblock(std::string,contblock);                 // store string into container using class as data type
+    void print (contblockfixed<T> object) {                 // to print contianer contents
 
-};
+        for (int i = 0; i < object.Size(); i++){
+
+            std::cout << object[i];
+        }
+    }
+
+    void storeblock (contblockfixed<T> mycont,std::string tempstring) {  // pass in the object and data we want to store
+
+        for (char c:tempstring) {                           // itterate over string and copy over char to append method
+
+            mycont.append(c);                               // should be using rvalue
+        }
+    }
+
+    ~contblockfixed () {};                                      // destructor
+
+}; // end of class
+
+
+
+// inherited class to use with a variable data type container
+// inherited class to pass into template arguemnt to define data type and move data from another container
+class contblock : public contdynamic<contblock*> {              // inherited class, to pass in as template arguemnt
+
+public:
+
+    void storeblock(contblock,std::string);                 // store string into container using class as data type
+    ~ contblock() {};                                         // destructor
+
+}; // end of class
 
 
 // inherited class for data to pass in to append if user defined data type container
@@ -158,19 +184,17 @@ class datapass  :   public contblock {                      // if container requ
 
 public:
 
-    datapass() {}
+    datapass(T) {}                                           // constructor using typename to pass in any data type
+    ~ datapass() {};                                         // destructor
 
-};
-
-
-void contblock::storeblock(std::string tempstring,contblock mycont) {        // store string into array template class
+}; // end of class
 
 
-    mycont.append();                                 // append with new allocated class
+void contblock::storeblock(contblock mycont,std::string tempstring) {        // store string into array template class
 
-    mycont.append(new datapass<char>());                            // append with new allocated user data type
-
-
+    mycont.append(new datapass<int>(5));                          // append with new allocated class
+    mycont.append(new datapass<char>('v'));                         // append with new allocated user data type
+    mycont.append(cstd::string ('ffefe'));
 
 }
 
@@ -178,39 +202,48 @@ void contblock::storeblock(std::string tempstring,contblock mycont) {        // 
 
 
 
+// very redumentary string class
 class string {
 
-    char* m_data;
-    size_t m_size;
+    char* m_data;                                           // char pointer for object/container
+    size_t m_size;                                          // variable for size of container
 
 public:
 
-    string () {};
+    string () {};                                           // defualt constructor
 
-    string (const char* string) {
+    string (char* string) {                           // want a constant pointer
 
-        m_size = strlen(string);
-        m_data = new char[m_size];
-        memcpy(m_data, string, m_size);
-
-
+        setstring(string);
     }
 
-    ~ string (){
+    ~ string (){                                            // destructor
 
-        delete m_data;
+        delete [] m_data;                                      // delete array we allocated earlier
     }
 
+    void getline (){}
+
+    void setstring (char* string){
+
+        m_size = strlen(string);                          // get the size of passed string
+        m_data = new char[m_size];                          // allocate new memory by passing in size of space needed
+        memcpy(m_data, string, m_size);          // copy (destination, source, size (number of bytes))
+    }
+
+    template<typename T>void locate (T);                                     // member decleration for locating in string
+
+}; // end of class
+
+
+template <typename T>
+void string::locate(T tolocate) {
 
 
 
 
 
-
-
-};
-
-
+}
 
 
 
@@ -259,3 +292,17 @@ public:
 
 // variatic templates (emplaceback)
 // destructor
+
+
+//try {
+//    new allocation
+//}   catch (std::bad_alloc& exc){
+//
+//
+//}
+
+
+// things to aks
+
+// does a virtual destructor in an inherited class also destroy the child classes of it
+// when that happens does
