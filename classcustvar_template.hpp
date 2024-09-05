@@ -66,7 +66,7 @@ private:
 
         for (size_t i = 0; i < cd_size; i++) {                  // to allocate more memory to increase container size
 
-            newBlock[i] = std::move(cd_data[i]);            // move data
+            newBlock[i] = std::move(cd_data[i]);            // move data from
         }
 
         for (size_t i = 0; i < cd_size; i++) {                  // for deallocating memory (shrink container)
@@ -74,7 +74,7 @@ private:
             cd_data[i].~T();                                // clear data without changing container size
         }
 
-        ::operator delete(cd_data, cd_capacity * sizeof(T));        // --
+        T::operator delete(cd_data, cd_capacity * sizeof(T));        // delete operator on object type T
         delete[] cd_data;                                 // delete from where we moved data from
         cd_data = newBlock;                               // assign pointer to block of meory where data was moved to
         cd_capacity = newCapacity;                        // assign a capacity based on block of memory we moved data to
@@ -87,7 +87,7 @@ public:
     virtual ~contdynamic() {                                        // destructor
 
         clear();                                                // clear the memory block
-        ::operator delete(cd_data, cd_capacity * sizeof(T));    // instead of array delete call oparator to delete
+        T::operator delete(cd_data, cd_capacity * sizeof(T));    // instead of array delete, delete object type T
     }
 
     void append(const T& element) {
@@ -194,7 +194,6 @@ void contblock::storeblock(contblock mycont,std::string tempstring) {        // 
 
     mycont.append(new datapass<int>(5));                          // append with new allocated class
     mycont.append(new datapass<char>('v'));                         // append with new allocated user data type
-    mycont.append(cstd::string ('ffefe'));
 
 }
 
@@ -205,7 +204,7 @@ void contblock::storeblock(contblock mycont,std::string tempstring) {        // 
 // very redumentary string class
 class string {
 
-    char* m_data;                                           // char pointer for object/container
+    char* m_data = nullptr;                                  // char pointer for object/container
     size_t m_size;                                          // variable for size of container
 
 public:
@@ -224,26 +223,36 @@ public:
 
     void getline (){}
 
-    void setstring (char* string){
+    const char& operator[] (size_t index) const { return *m_data;}                // index return as const
 
-        m_size = strlen(string);                          // get the size of passed string
-        m_data = new char[m_size];                          // allocate new memory by passing in size of space needed
-        memcpy(m_data, string, m_size);          // copy (destination, source, size (number of bytes))
+    int length () { return m_size;}                                             // returns size
+
+    char& operator[] (size_t index) { return *(m_data + index);}                            // index
+
+        void setstring (char* string){
+
+            m_size = strlen(string);                          // get the size of passed string
+            m_data = new char[m_size];                          // allocate new memory by passing in size of space needed
+            memcpy(m_data, string, m_size);          // copy (destination, source, size (number of bytes))
+        }
+
+        template<typename T>int locate (T);                                     // member decleration for locating in string
+
+    }; // end of class
+
+
+    template <typename T>
+    int string::locate(T tolocate) {
+
+        for (int i = 0; i < string::m_size; i++){
+
+            if ()
+
+        }
+
+
+
     }
-
-    template<typename T>void locate (T);                                     // member decleration for locating in string
-
-}; // end of class
-
-
-template <typename T>
-void string::locate(T tolocate) {
-
-
-
-
-
-}
 
 
 

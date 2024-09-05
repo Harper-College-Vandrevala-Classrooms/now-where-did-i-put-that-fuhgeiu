@@ -44,13 +44,13 @@ using namespace cstd;
 
     getstring (*userinput);                                      // get string and store into custom container
 
-//
+// using string class
 
-    cstd::string mystring();                                        // if using a string class
+    cstd::string mystring;                                        // if using a string class
 
-    storestring(mystring());                                // store into object container using constructor
+    storestring(mystring);                                // store into object container using constructor
 
-    mystring().locate('f');
+    mystring.locate('f');                            // to locate
 
 }
 
