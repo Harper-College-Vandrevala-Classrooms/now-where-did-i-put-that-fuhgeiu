@@ -112,20 +112,17 @@ public:
         cd_size++;                                          // increment size
     }
 
-    void popback() {
-        if (cd_size > 0) {
-
+    void popback() {                                      // to destruct and deallocate last element
+        if (cd_size > 0) {                                  // only when container is bigger than zero
+                                                            // to prevent segmentation error
             cd_size--;
-            cd_data[cd_size].~T();
-        }
+            cd_data[cd_size].~T();                          // destruct array over size of array and not the capacity
+        }                                                    // of the array, as some may not have data stored
     }
 
-    void clear() {
+    void clear() {                                                    // to clear each element
 
-        for (size_t i = 0; i < cd_size; i++){
-            cd_data[i].~T();
-        }
-
+        for (size_t i = 0; i < cd_size; i++) { cd_data[i].~T(); }     // itterate over container, destruct each element
         cd_size = 0;
     }
 
@@ -168,19 +165,23 @@ public:
 
 // inherited class to use with a variable data type container
 // inherited class to pass into template arguemnt to define data type and move data from another container
-class contblock : public contdynamic<contblock*> {              // inherited class, to pass in as template arguemnt
+class variable  : public contdynamic<variable*>{              // inherited class, to pass in as template arguemnt
 
 public:
 
-    void storeblock(contblock,std::string);                 // store string into container using class as data type
-    ~ contblock() {};                                         // destructor
+    void storeblock(variable,std::string);                 // store string into container using class as data type
+    ~ variable() {};                                         // destructor
+    void print () {
+
+        std::cout << "test";
+    }
 
 }; // end of class
 
 
 // inherited class for data to pass in to append if user defined data type container
 template <typename T>                                       // generic allows, reuse class for multiple data types
-class datapass  :   public contblock {                      // if container requires a template as element
+class datapass  :   public variable {                      // if container requires a template as element
 
 public:
 
@@ -189,13 +190,6 @@ public:
 
 }; // end of class
 
-
-void contblock::storeblock(contblock mycont,std::string tempstring) {        // store string into array template class
-
-    mycont.append(new datapass<int>(5));                          // append with new allocated class
-    mycont.append(new datapass<char>('v'));                         // append with new allocated user data type
-
-}
 
 
 

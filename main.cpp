@@ -36,7 +36,7 @@ using namespace cstd;
 
     std::cout << "enter a sentence\n";                      // prompt user
 
-    contblock *userinput = new contblock;                   // create object for container heap
+    variable *userinput = new variable;                   // create object for container heap
 
     contblockfixed<char> *userinputfixed = new contblockfixed<char>;     // create heap obejct for fixed data container
 
@@ -51,6 +51,14 @@ using namespace cstd;
     storestring(mystring);                                // store into object container using constructor
 
     mystring.locate('f');                            // to locate
+
+// using variatic tempalte
+
+    contdynamic<variable*> *variatic =  new contdynamic<variable*>;      // variatic container
+
+    variable *variatoc = new variable;
+
+    variatoc->print();
 
 }
 
