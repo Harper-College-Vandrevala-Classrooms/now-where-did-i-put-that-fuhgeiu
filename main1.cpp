@@ -1,26 +1,33 @@
-#include "stirnclass.hpp"
+#include "str.hpp"
 #include <iostream>
 #include <cassert>
 
-void getandstore (cstd::string &mystring) {
+void getandstore (strstd::string &mystring) {
 
-
-    mystring.setstring("foo");                               // set pass in a const char pointer
+    mystring.setstring("foo bar");                               // set pass in a const char pointer
 
 }
 
+
 int main () {
 
-    cstd::string *mystring = new cstd::string;
+    strstd::string *mystring = new strstd::string;
+
+    strstd::string standardstring;
 
     getandstore(*mystring);
 
-    cstd::string input("foo");
+    strstd::string input("foo");
 
-    assert(mystring->locate(input) == 1);                        // found, passing object
-
-    assert(mystring->locate("foo") == 1);               // found, passing string literal
-    assert(mystring->locate("foo0") == -1);             // not found, input is greater than the string itself
+    assert(mystring->locate(input) == 1);             // (cstd::string)     only pass onjects
+    assert(mystring->locate('f') == 1);            // (char)             only pass single quote char
+    assert(mystring->locate("foo0") == -1);   // (char [])          only pass double quote string literals
+    assert(standardstring.locate('g') == -1);
+    assert(mystring->locate('o') == 2);
+    assert(mystring->locate("o") == 2);       // (char [])         only pass double quotes string literal
+    assert(mystring->locate("fo") == 1);
+    assert(mystring->locate(' ') == 4);
+    assert(mystring->locate("bar") == 5);
 
     mystring->setstring("fo");                                  // change string of input
 

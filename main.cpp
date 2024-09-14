@@ -60,6 +60,10 @@ using namespace cstd;
 
     variatoc->print();
 
+// fixed array
+
+    cstd::mydataT<char,2> myarray;
+
 }
 
 }
