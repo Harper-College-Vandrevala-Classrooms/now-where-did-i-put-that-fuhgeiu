@@ -1,5 +1,37 @@
 #include <iostream>
 
+/*
+
+    STRING CLASS
+
+    strstd::string, non template class to store strings in a character array
+
+    MEMBERS
+
+
+
+    STRING LITERAL LENGTH       (lines 88-95)
+    COMPARE STRINGS             (lines 98-139)
+
+    1) strstd::strlength size_t (const char*)
+
+       <size_t S, typename T>
+    2) strstd::strcompare int (const char* , T (&array)[S] (size must be r value))
+
+    3) strstd::strcompare int (const char* , char*)
+
+    4) strstd::strcompare int (const char*, strstd::string, int)
+
+    _______________________________________________________________________________________________________________
+    1) get size of string literal, does not include null. return type, unsigned int  size_t
+    2) compare string literal to array. template pass in unsighned int for size, and array data type. cannot pass in
+       cannot pass in a runtime only value for size, must be known at compile time
+    3) compare string literal to array. pass in pointer to array
+    4) compare string literal with a string object. (compare to, object to compare with, index where begin search)
+       return type int, returns 0, if comparision is true. return -1, if comparision false
+
+*/
+
 namespace strstd{
 
 size_t strlength (const char*);                            // declare to use in string class
@@ -112,41 +144,6 @@ int strcompare (const char* string, strstd::string look, size_t begin) {
 
 }   // end of namespace
 
-
-
-/*
-
-    strstd::string, non template class to store strings in a character array
-
-
-
-
-
-
-
-
-
-        STRING LITERAL LENGTH
-    COMPARE STRINGS
-
-    1) strstd::strlength size_t (const char*)
-
-       <size_t S, typename T>
-    2) strstd::strcompare int (const char* , T (&array)[S] (size must be r value))
-
-    3) strstd::strcompare int (const char* , char*)
-
-    4) strstd::strcompare int (const char*, strstd::string, int)
-
-    _______________________________________________________________________________________________________________
-    1) get size of string literal, does not include null. return type, unsigned int  size_t
-    2) compare string literal to array. template pass in unsighned int for size, and array data type. cannot pass in
-       cannot pass in a runtime only value for size, must be known at compile time
-    3) compare string literal to array. pass in pointer to array
-    4) compare string literal with a string object. (compare to, object to compare with, index where begin search)
-       return type int, returns 0, if comparision is true. return -1, if comparision false
-
-*/
 
 
 
